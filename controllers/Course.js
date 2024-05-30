@@ -1,6 +1,6 @@
 const Course = require("../models/Course");
-const tags = require("../models/Tags");
-const Tag = require("../models/Tags");
+const tags = require("../models/category");
+const Tag = require("../models/category");
 const User = require("../models/User");
 const {
   uploadToCloudinary,
@@ -119,7 +119,14 @@ exports.showAllCourses = async (req, res) => {
         ratingAndReviews: true,
         studentsEnrolled: true,
       }
-    );
+    )
+      .populate("instructor")
+      .exec();
+    return res.status(200).json({
+      success: true,
+      message: "Data for all courses fetched successfully",
+      data: allCourses,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
